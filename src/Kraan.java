@@ -4,12 +4,14 @@ public class Kraan {
     private double vy;
     private int posX;
     private int posY;
+    private boolean busy;
 
     public Kraan(double vx, double vy, int posX, int posY) {
         this.vx = vx;
         this.vy = vy;
         this.posX = posX;
         this.posY = posY;
+        this.busy = false;
     }
 
     public double getVx() {
