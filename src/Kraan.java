@@ -49,6 +49,14 @@ public class Kraan {
         this.posY = posY;
     }
 
+    public int distX(int x){
+        return x-this.posX;
+    }
+
+    public int distY(int y){
+        return y-this.posY;
+    }
+
     public double travelTime(int x, int y){
         double timeX=Math.abs(posX-x)/vx;
         double timeY=Math.abs(posY-y)/vy;
