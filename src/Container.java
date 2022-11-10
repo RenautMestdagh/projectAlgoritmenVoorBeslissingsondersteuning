@@ -5,8 +5,11 @@ public class Container {
         this.center = center;
     }
 
-    private int length;
+    public Container(int length) {
+        this.length = length;
+    }
 
+    private int length;
     private int[] center;
 
     public int getLength() {
