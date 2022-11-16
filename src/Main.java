@@ -1,11 +1,6 @@
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
@@ -20,7 +15,6 @@ public class Main {
         Field field = new Field(maxDimentions[0]+1, maxDimentions[1]+1, maxStackHeight);
 
         input.placeInitialContainers(field, containers);
-
 
 
 
