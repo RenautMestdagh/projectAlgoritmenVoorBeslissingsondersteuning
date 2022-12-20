@@ -108,8 +108,20 @@ public class Yard {
                     size--;
                 }
             }
+            boolean found=false;
+            for (int i = 0; i < size; i++) {
+                if (field.liftFromTarget(toMove.get(i),cranes.size())){
+                    toMove.remove(i);
+                    size--;
+                    found=true;
+                }
+            }
+            if (found){
+                toMove=new ArrayList<>(target);
+            }
         }
         print();
+        System.out.println("");
     }
 
     public void print() {
