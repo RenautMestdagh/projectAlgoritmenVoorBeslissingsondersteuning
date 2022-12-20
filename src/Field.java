@@ -1,24 +1,45 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Field {
 
-    private int[][][] map;
+    private int[][][] map; //is zyx
     public void placeInitialContainers(List<Assignment> assignments){
-        for (Assignment a:assignments) {
-            int containerId=a.getContainer().getId();
-            int length=a.getContainer().getLength();
-            int slotX=a.getSlot().getX();
-            int sloty=a.getSlot().getY();
-            
+        List<Container>[][] containers=new ArrayList[map[0][0].length][map[0].length];//hier xy structuur
+        for (int i = 0; i < containers.length; i++) {
+            for (int j = 0; j < containers[0].length; j++) {
+                containers[i][j]=new ArrayList<Container>();
+            }
         }
+//        System.out.println(containers.getClass().getSimpleName());
+//        System.out.println(containers[0].getClass().getSimpleName());
+//        System.out.println(containers[0][0].getClass().getName());
+        for (Assignment a:assignments) {
+            Container c=a.getContainer();
+            Slot s=a.getSlot();
+            int lengte=c.getLength();
+            containers[s.getX()][s.getY()].add(c);
+            if (c.getLength()>1)containers[s.getX()+1][s.getY()].add(c);
+        }
+        for (int i = 0; i < containers.length; i++) {
+            for (int j = 0; j < containers[0].length; j++) {
+                if (containers[i][j].size()>1) System.out.println("meer dan 1 container moet algo voor schikken");
+                else if (containers[i][j].size()>0)map[0][j][i]=containers[i][j].get(0).getId();
+            }
+        }
+        System.out.println(map.toString());
     }
 
     public Field(int maxX, int maxY, int maxZ) {
         
-        this.map = new int[maxX][maxY][maxZ];
-        Arrays.fill(map,-1);
-        System.out.println("map = " + map);
+        this.map = new int[maxZ][maxY][maxX];
+        for (int[][] i:this.map) {
+            for (int [] j:i) {
+                Arrays.fill(j,0);
+            }
+
+        }
     }
 
     public boolean placeContainer(int id, int slot) {      //plaats container met lengte 1
@@ -40,8 +61,9 @@ public class Field {
         return false;
     }
 
-    public boolean placeContainer(int id, int slot1, int slot2) {            //plaats container met lengte langer dan 1.
-                                                                            //containers liggen langs Y-as
+    public boolean placeContainer(int id, int slot1, int slot2) {
+        //plaats container met lengte langer dan 1.
+        //containers liggen langs Y-as
         if(slot1>slot2){            //zorgen dat slot1<slot2
             int tmp=slot1;
             slot1=slot2;

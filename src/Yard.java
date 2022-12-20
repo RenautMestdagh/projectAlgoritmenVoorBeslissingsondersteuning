@@ -21,10 +21,10 @@ public class Yard {
     public Yard(String path) throws IOException {
         String string= Files.readString(Path.of(path));
         JSONObject obj=new JSONObject(string);
-        this.name=(String)obj.get("name");
-        this.length=(int) obj.get("length");
-        this.width=(int) obj.get("width");
-        this.maxHeight=(int) obj.get("maxheight");
+        this.name= obj.getString("name");
+        this.length= obj.getInt("length");
+        this.width= obj.getInt("width");
+        this.maxHeight= obj.getInt("maxheight");
 
         JSONArray slotsJSON=obj.getJSONArray("slots");
         JSONArray cranesJSON=obj.getJSONArray("cranes");
@@ -35,15 +35,15 @@ public class Yard {
         for (int i = 0; i < cranesJSON.length(); i++) {
             JSONObject o=cranesJSON.getJSONObject(i);
             Crane crane=new Crane(
-                    (int) o.get("id"),
-                    (double) (o.get("x")),
-                    (double) (o.get("y")),
-                    (int) o.get("xmin"),
-                    (int) o.get("ymin"),
-                    (int) o.get("xmax"),
-                    (int) o.get("ymax"),
-                    (int) o.get("xspeed"),
-                    (int) o.get("yspeed")
+                    o.getInt("id"),
+                    o.getDouble("x"),
+                    o.getDouble("y"),
+                    o.getInt("xmin"),
+                    o.getInt("ymin"),
+                    o.getInt("xmax"),
+                    o.getInt("ymax"),
+                    o.getInt("xspeed"),
+                    o.getInt("yspeed")
             );
             cranes.put(crane.getId(),crane);
 
@@ -53,9 +53,9 @@ public class Yard {
         for (int i = 0; i < slotsJSON.length(); i++) {
             JSONObject o=slotsJSON.getJSONObject(i);
             Slot slot=new Slot(
-                    (int) o.get("id"),
-                    (int) o.get("x"),
-                    (int) o.get("y")
+                    o.getInt("id"),
+                    o.getInt("x"),
+                    o.getInt("y")
 
             );
             slots.put(slot.getId(),slot);
@@ -65,8 +65,8 @@ public class Yard {
         for (int i = 0; i < containersJSON.length(); i++) {
             JSONObject o=containersJSON.getJSONObject(i);
             Container container=new Container(
-                    (int) o.get("id"),
-                    (int) o.get("length")
+                    o.getInt("id"),
+                    o.getInt("length")
             );
             containers.put(container.getId(),container);
         }
@@ -74,8 +74,8 @@ public class Yard {
         this.assignments=new ArrayList<>();
         for (int i = 0; i < assignmentsJSON.length(); i++) {
             JSONObject o=assignmentsJSON.getJSONObject(i);
-            Container container=containers.get((int) o.get("container_id"));
-            Slot slot= slots.get((int) o.get("container_id"));
+            Container container=containers.get(o.getInt("container_id"));
+            Slot slot= slots.get(o.getInt("slot_id"));
             assignments.add(new Assignment(slot,container));
         }
         this.field=new Field(length,width,maxHeight);
