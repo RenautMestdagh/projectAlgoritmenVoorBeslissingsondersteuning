@@ -41,6 +41,10 @@ public class JSONHandler {
         yard.setLength(obj.getInt("length"));
         yard.setWidth(obj.getInt("width"));
         yard.setMaxHeight(obj.getInt("maxheight"));
+        try {
+            yard.setTargetHeigt(obj.getInt("targetheight"));
+        }catch (Exception ignored){}
+
 
         JSONArray slotsJSON=obj.getJSONArray("slots");
         JSONArray cranesJSON=obj.getJSONArray("cranes");

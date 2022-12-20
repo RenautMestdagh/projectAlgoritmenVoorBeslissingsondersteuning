@@ -4,11 +4,12 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException{
-        File file1 = new File("instances/5t/TerminalB_20_10_3_2_160.json");
-        File file2 = new File("instances/5t/targetTerminalB_20_10_3_2_160.json");
+        File file1 = new File("instances/6t/Terminal_10_10_3_1_100.json");
+        File file2 = new File("instances/6t/targetTerminal_10_10_3_1_100.json");
         Yard yard=JSONHandler.getYard(file1,file2);
-
+        yard.print();
         yard.findSolution();
+        yard.print();
         //---------------------------------------------------------------
 
 

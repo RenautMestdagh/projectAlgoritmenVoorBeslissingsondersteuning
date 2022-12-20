@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
@@ -39,9 +40,8 @@ public class FieldV2 {
                 map[currentX+i][currentY].pop();
                 map[targetX+i][targetY].push(c);
             }
-            //System.out.println("Moved container "+c.getId()+ " from: "+c.getCurrentSlot().getId()+" to "+c.getTarget().getId());
+            System.out.println("Moved container "+c.getId()+ " from: "+c.getCurrentSlot().getId()+" to "+c.getTarget().getId());
             c.setCurrentSlot(c.getTarget());
-            System.out.println("Moved container "+c.getId()+ " from: "+currentX+","+currentY+" to "+targetX+","+targetY);
             return true;
         }
         return false;
@@ -131,7 +131,7 @@ public class FieldV2 {
                                 map[tomove.getCurrentSlot().getX()+i]
                                         [tomove.getCurrentSlot().getY()].pop();
                             }
-                            Slot slot=slots.get(x+y*Y);
+                            Slot slot=slots.get(x+y*X);
                             if (slot.getX()!=x||slot.getY()!=y) System.out.println("foutje herberken key");
                             System.out.println("Moved container sdfsdf"+tomove.getId()+ " from: "+tomove.getCurrentSlot().getX()+","+tomove.getCurrentSlot().getY()+" to "+slot.getX()+","+slot.getY());
                             tomove.setCurrentSlot(slot);
@@ -162,7 +162,31 @@ public class FieldV2 {
 
         return false;
     }
-    public boolean checkIfPlacable(int x, int y, int lengte){
+
+    public boolean moveContainer(Container container, HashMap<Integer,Slot> slots, int targetHeigt) {
+        for (int x = 0; x <= X-container.getLength(); x++) {
+            for (int y = 0; y < Y; y++) {
+                if (checkIfPlacable(x,y,container.getLength(),targetHeigt)){
+                    for (int i = 0; i < container.getLength(); i++) {
+                        map[x+i][y].push(container);
+                        map[container.getCurrentSlot().getX()+i]
+                                [container.getCurrentSlot().getY()].pop();
+                    }
+                    Slot slot=slots.get(x+y*X);
+                    if (slot.getX()!=x||slot.getY()!=y) System.out.println("foutje herberken key");
+                    System.out.println("Moved container"+container.getId()+
+                            " from: "+container.getCurrentSlot().getX()+"," +container.getCurrentSlot().getY()+
+                            " to "+slot.getX()+","+slot.getY());
+                    container.setCurrentSlot(slot);
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+    public boolean checkIfPlacable(int x, int y, int lengte){return checkIfPlacable(x,y,lengte,Z);}
+    public boolean checkIfPlacable(int x, int y, int lengte,int targetHeight){
         Stack<Container> containerStack=map[x][y];
         int size=containerStack.size();
 
@@ -176,12 +200,9 @@ public class FieldV2 {
             if (first.getCurrentSlot().getX()<x) return false;
             if (last.getCurrentSlot().getX()+last.getLength()>x+lengte) return false;
         }
-
-
+        if (size>=targetHeight)return false;
         return true;
     }
-
-
 
     public void placeInitialContainers(List<Assignment> assignments) {
         for (Assignment a : assignments) {
@@ -245,6 +266,27 @@ public class FieldV2 {
                 System.out.println();
             }
         }
+    }
+
+
+    public List<Container> getTooHigh(int targetHeight) {
+        List<Container> initial=new ArrayList<>();
+        for (int i = 0; i < X; i++) {
+            for (int j = 0; j < Y; j++) {
+                Stack<Container> containerStack=map[i][j];
+                for (int k = 0; k < containerStack.size()-targetHeight; k++) {
+                    initial.add(containerStack.get(containerStack.size()-1-k));
+                }
+            }
+        }
+        List<Container> answer =new ArrayList<>();
+        for (Container element : initial) {
+
+            if (!answer.contains(element)) {
+                answer.add(element);
+            }
+        }
+        return answer;
     }
 
 
