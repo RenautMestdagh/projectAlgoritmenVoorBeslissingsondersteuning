@@ -2,7 +2,8 @@ public class Container {
     private final int id;
     private final int length;
 
-    private int[] center;
+    private Slot target;
+    private Slot currentSLot;
 
     public Container(int id, int length) {
         this.id=id;
@@ -16,7 +17,17 @@ public class Container {
         return length;
     }
 
-    public int[] getCenter(){
-        return this.center;
+    public void setTarget(Slot slot) {
+        this.target=slot;
+    }
+    public Slot getTarget() {
+        return this.target;
+    }
+
+    public void setCurrentSlot(Slot slot) {
+        this.currentSLot=slot;
+    }
+    public Slot getCurrentSlot(){
+        return this.currentSLot;
     }
 }

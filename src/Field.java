@@ -32,7 +32,6 @@ public class Field {
     }
 
     public Field(int maxX, int maxY, int maxZ) {
-        
         this.map = new int[maxZ][maxY][maxX];
         for (int[][] i:this.map) {
             for (int [] j:i) {

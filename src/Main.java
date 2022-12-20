@@ -4,10 +4,11 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) throws IOException{
-        File folder=new File("initial");
-        for (File filentry: folder.listFiles()){
-            Yard yard=new Yard(filentry.getPath());
-        }
+        File file1 = new File("instances/1t/TerminalA_20_10_3_2_100.json");
+        File file2 = new File("instances/1t/targetTerminalA_20_10_3_2_100.json");
+        Yard yard=JSONHandler.getYard(file1,file2);
+        yard.print();
+        yard.findSolution();
 
 
 
