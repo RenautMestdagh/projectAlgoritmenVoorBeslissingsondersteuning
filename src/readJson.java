@@ -1,7 +1,4 @@
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -11,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class readJson {
-
     private final JSONObject jsonObject;
     public readJson(String filename) throws IOException, ParseException {
 
@@ -24,8 +20,6 @@ public class readJson {
     }
 
     public Map<Integer, Container> returnContainers(){
-
-
 
         Map<Integer, Container> containers = new HashMap<Integer, Container>();
 

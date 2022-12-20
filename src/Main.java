@@ -1,11 +1,15 @@
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws IOException, ParseException {
-
+        File folder=new File("initial");
+        for (File filentry: folder.listFiles()){
+            Yard yard=new Yard(filentry.getPath());
+        }
         readJson input = new readJson("start.json");
 
         Map<Integer, Container> containers = input.returnContainers();
@@ -21,8 +25,7 @@ public class Main {
 
 
         //---------------------------------------------------------------
-        Kraan k1=new Kraan(0.75,0.75,0,0);
-        Kraan k2=new Kraan(0.70,0.70,100,0);
+
 
 //        Trajectory t1 = new Trajectory(k1, 100,100, 3);
 //        Trajectory t2 = new Trajectory(k1, 0,100, 3);
