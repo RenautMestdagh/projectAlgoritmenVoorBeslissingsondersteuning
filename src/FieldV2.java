@@ -18,7 +18,7 @@ public class FieldV2 {
             }
         }
     }
-
+    //hier gewoon proberen van a naar b
     public boolean trySimpleMove(Assignment target) {
         Container c=target.getContainer();
         if (c.getCurrentSlot()==target.getSlot()){
@@ -33,6 +33,7 @@ public class FieldV2 {
         int targetX=target.getSlot().getX();
         int targetY=target.getSlot().getY();
         int lengte=c.getLength();
+        //controleer of mogelijk
         if (checkIfPlacable(targetX,targetY,lengte)){
             for (int i = 0; i < lengte; i++) {
                 map[currentX+i][currentY].pop();
@@ -45,6 +46,7 @@ public class FieldV2 {
         }
         return false;
     }
+    //hier gewoon van a naar b maar met container erboven vastgehouden door kraan
     public boolean liftFromCurrent(Assignment target, int cranes) {
         Container c=target.getContainer();
         if (c.getCurrentSlot()==target.getSlot()){
@@ -67,21 +69,22 @@ public class FieldV2 {
         int lengte=c.getLength();
 
         if(checkIfPlacable(targetX,targetY,lengte)){
+            for (int i = 1; i < grootteStack-niveauContainer; i++) {
+                System.out.println("while holding: "+map[currentX][currentY].get(niveauContainer+i).getId());
+            }
             for (int i = 0; i < lengte; i++) {
                 map[currentX+i][currentY].remove(c);
                 map[targetX+i][targetY].push(c);
             }
-            System.out.println("Moved container "+c.getId()+ " from: "+c.getCurrentSlot().getId()+" to "+c.getTarget().getId());
+            System.out.println("Moved "+c.getId()+ " from: "+c.getCurrentSlot().getId()+" to "+c.getTarget().getId());
             c.setCurrentSlot(target.getSlot());
-            for (int i = 1; i < grootteStack-niveauContainer; i++) {
-                System.out.println("while holding: "+map[currentX][currentY].get(niveauContainer+i).getId());
-            }
             return true;
         }
 
 
         return false;
     }
+    //nog niet nodig geweest
     public boolean liftFromTarget(Assignment target, int cranes) {
         //todo
         Container c=target.getContainer();
@@ -97,6 +100,8 @@ public class FieldV2 {
 
         return false;
     }
+    //verplaatst container uit de weg om dan terug te plaatsen
+    //kan fouten bevatten omdat nog niet gebruikt deze code
     public boolean moveContainerOutOfWay(Assignment target, HashMap<Integer,Slot> slots){
         Container c=target.getContainer();
         if (c.getCurrentSlot()==target.getSlot()){
@@ -112,7 +117,7 @@ public class FieldV2 {
         int grootteStack=containerStack.size();
         int niveauContainer=containerStack.indexOf(c);
 
-
+        //verplaats alle containers in de weg
         for (int aantalPops = 0; aantalPops<grootteStack-niveauContainer-1; aantalPops++) {
             //eerste container krijgen
             Container tomove=containerStack.peek();
@@ -135,6 +140,7 @@ public class FieldV2 {
                 }
             }
         }
+        //check of containers wel weg
         if (containerStack.peek()!=c) {
             System.out.println("foutje met poppen");
             return false;
