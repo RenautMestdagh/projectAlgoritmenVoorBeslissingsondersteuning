@@ -23,6 +23,9 @@ public class FieldV2 {
         if (c.getCurrentSlot()==target.getSlot()){
             return true;
         }
+        if (c.getId()==90||c.getId()==96){
+            System.out.println("checkpoint");
+        }
         int currentX=c.getCurrentSlot().getX();
         int currentY=c.getCurrentSlot().getY();
 
@@ -32,33 +35,77 @@ public class FieldV2 {
         int targetX=target.getSlot().getX();
         int targetY=target.getSlot().getY();
         int lengte=c.getLength();
-        boolean plaats=true;
-        //kijkt of gewoon leeg en kan toevoegen
-        for (int i = targetX; i < targetX+lengte-1; i++) {
-            if (!map[i][targetY].empty()) plaats=false;
-        }
-        if (plaats){
-            map[currentX][currentY].pop();
-            map[targetX][targetY].push(c);
+        if (checkIfPlacable(targetX,targetY,lengte)){
+            for (int i = 0; i < lengte; i++) {
+                map[currentX+i][currentY].pop();
+                map[targetX+i][targetY].push(c);
+            }
             c.setCurrentSlot(c.getTarget());
-            System.out.println("changed container: "+c.getId());
-            printField();
-            System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+            System.out.println("Moved container "+c.getId()+ " from: "+currentX+","+currentY+" to "+targetX+","+targetY);
             return true;
         }
         return false;
     }
-    public boolean tryMoveWithCrane(Assignment target, int size) {
+    public boolean liftFromCurrent(Assignment target, int cranes) {
         Container c=target.getContainer();
         if (c.getCurrentSlot()==target.getSlot()){
             return true;
         }
         int currentX=c.getCurrentSlot().getX();
         int currentY=c.getCurrentSlot().getY();
-        if (map[currentX][currentY].get(c)){
+        Stack<Container> containerStack=map[currentX][currentY];
+        int grootteStack=containerStack.size();
+        int niveauContainer=containerStack.indexOf(c);
+
+        if (grootteStack-cranes>niveauContainer){
             return false;
         }
+
+        //verplaatsing
+        int targetX=target.getSlot().getX();
+        int targetY=target.getSlot().getY();
+        int lengte=c.getLength();
+
+        if(checkIfPlacable(targetX,targetY,lengte)){
+            for (int i = 0; i < lengte; i++) {
+                map[currentX+i][currentY].pop();
+                map[targetX+i][targetY].push(c);
+            }
+            System.out.println("Moved container "+c.getId()+ " from: "+currentX+","+currentY+" to "+targetX+","+targetY);
+            for (int i = 1; i < grootteStack-niveauContainer; i++) {
+                System.out.println("while holding: "+map[currentX][currentY].get(niveauContainer+i).getId());
+            }
+            return true;
+        }
+
+
         return false;
+    }
+    public boolean liftFromTarget(Assignment target, int cranes) {
+        Container c=target.getContainer();
+        if (c.getCurrentSlot()==target.getSlot()){
+            return true;
+        }
+        int currentX=c.getCurrentSlot().getX();
+        int currentY=c.getCurrentSlot().getY();
+        Stack<Container> currentColumn=map[currentX][currentY];
+        if (currentColumn.size()-cranes>currentColumn.indexOf(c)){
+            return false;
+        }
+
+        return false;
+    }
+    public boolean checkIfPlacable(int x, int y, int lengte){
+        Stack<Container> containerStack=map[x][y];
+        int size=containerStack.size();
+
+        if (size>0){
+            if (containerStack.peek().getLength()>lengte) return false;
+        }
+        for (int i = x; i < x+lengte-1; i++) {
+            if (map[i][y].size()!=size) return false;
+        }
+        return true;
     }
     public void placeInitialContainers(List<Assignment> assignments) {
         for (Assignment a : assignments) {
@@ -105,14 +152,19 @@ public class FieldV2 {
         }
     }
 
-    public void printField(){
+    public void printField(int size){
+        int numberDigits=Integer.toString(size).length();
         for (int Z = 0; Z <this.Z; Z++) {
             System.out.println("Z = " + Z + " =========================");
             for (int i = 0; i < Y; i++) {
                 System.out.print(i+": ");
                 for (int j = 0; j < X; j++) {
-                    if (map[j][i].size() > Z) System.out.printf("%02d",map[j][i].get(Z).getId());
-                    else System.out.print("  ");
+                    if (map[j][i].size() > Z) System.out.printf("%0"+numberDigits+"d",map[j][i].get(Z).getId());
+                    else {
+                        for (int k = 0; k < numberDigits; k++) {
+                            System.out.print(" ");
+                        }
+                    }
                     System.out.print(",");
                 }
                 System.out.println();

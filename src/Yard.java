@@ -96,16 +96,24 @@ public class Yard {
             }
             //kan kraan als backup gebruikt worden
             for (int i = 0; i < size; i++) {
-                if (field.tryMoveWithCrane(toMove.get(i),cranes.size())){
+                if (field.liftFromCurrent(toMove.get(i),cranes.size())){
+                    toMove.remove(i);
+                    size--;
+                }
+            }
+            //kan targetstack opheffen
+            for (int i = 0; i < size; i++) {
+                if (field.liftFromTarget(toMove.get(i),cranes.size())){
                     toMove.remove(i);
                     size--;
                 }
             }
         }
+        print();
     }
 
     public void print() {
-        field.printField();
+        field.printField(slots.size());
     }
 
     public void initialize() {
