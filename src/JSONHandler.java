@@ -26,6 +26,9 @@ public class JSONHandler {
             target.add(new Assignment(slot,container));
         }
         yard.setTarget(target);
+        for (Assignment a:target) {
+            a.getContainer().setTarget(a.getSlot());
+        }
         return yard;
     }
     public static Yard getYard(File instance) throws IOException {

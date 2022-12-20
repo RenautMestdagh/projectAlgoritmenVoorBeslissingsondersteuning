@@ -48,7 +48,18 @@ public class FieldV2 {
         }
         return false;
     }
-
+    public boolean tryMoveWithCrane(Assignment target, int size) {
+        Container c=target.getContainer();
+        if (c.getCurrentSlot()==target.getSlot()){
+            return true;
+        }
+        int currentX=c.getCurrentSlot().getX();
+        int currentY=c.getCurrentSlot().getY();
+        if (map[currentX][currentY].get(c)){
+            return false;
+        }
+        return false;
+    }
     public void placeInitialContainers(List<Assignment> assignments) {
         for (Assignment a : assignments) {
             Container c = a.getContainer();
@@ -108,4 +119,6 @@ public class FieldV2 {
             }
         }
     }
+
+
 }
