@@ -1,31 +1,22 @@
 public class Container {
+    private final int id;
+    private final int length;
 
-    public Container(int length, int[] center) {
-        this.length = length;
-        this.center = center;
-    }
-
-    public Container(int length) {
-        this.length = length;
-    }
-
-    private int length;
     private int[] center;
+
+    public Container(int id, int length) {
+        this.id=id;
+        this.length=length;
+    }
+    public int getId() {
+        return id;
+    }
 
     public int getLength() {
         return length;
     }
 
-    public int[] getcenter() {
-        return center;
+    public int[] getCenter(){
+        return this.center;
     }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public void setCenter(int[] center) {
-        this.center = center;
-    }
-
 }

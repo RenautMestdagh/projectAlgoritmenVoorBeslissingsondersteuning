@@ -1,16 +1,24 @@
 import java.util.Arrays;
+import java.util.List;
 
 public class Field {
 
-    private final int[][][] map;
+    private int[][][] map;
+    public void placeInitialContainers(List<Assignment> assignments){
+        for (Assignment a:assignments) {
+            int containerId=a.getContainer().getId();
+            int length=a.getContainer().getLength();
+            int slotX=a.getSlot().getX();
+            int sloty=a.getSlot().getY();
+            
+        }
+    }
 
     public Field(int maxX, int maxY, int maxZ) {
+        
         this.map = new int[maxX][maxY][maxZ];
-        for (int[][] ints : map) {
-            for (int[] anInt : ints) {
-                Arrays.fill(anInt, 0);  //fill 3d map with 0
-            }
-        }
+        Arrays.fill(map,-1);
+        System.out.println("map = " + map);
     }
 
     public boolean placeContainer(int id, int slot) {      //plaats container met lengte 1

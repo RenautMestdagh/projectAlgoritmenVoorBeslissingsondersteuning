@@ -4,13 +4,13 @@ public class Trajectory {
     HashMap<Integer, Punt> trajectory = new HashMap<>();       //key: time      value: Punt
     final int safety_value = 5;
 
-    public Trajectory(Kraan k, int toX, int toY, int startTime){
+    public Trajectory(Crane k, int toX, int toY, int startTime){
         int time = (int)Math.ceil(k.travelTime(toX, toY));
         double vx= (double)k.distX(toX)/time;
         double vY= (double)k.distY(toY)/time;
 
         for(int i=0;i<=time;i++){
-            Punt p = new Punt(k.getPosX()+vx*i,k.getPosY()+vY*i);
+            Punt p = new Punt(k.getX()+vx*i,k.getY()+vY*i);
             trajectory.put(startTime+i, p);
         }
     }
