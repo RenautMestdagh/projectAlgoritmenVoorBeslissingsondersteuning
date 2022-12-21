@@ -19,4 +19,8 @@ public class Slot {
     public int getY() {
         return y;
     }
+
+    public static Slot XYtoSlot(int x, int y) {
+        return Yard.getSlots().get(y*Yard.getLength()+x);
+    }
 }

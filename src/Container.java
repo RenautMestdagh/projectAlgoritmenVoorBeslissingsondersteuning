@@ -30,4 +30,11 @@ public class Container {
     public Slot getCurrentSlot(){
         return this.currentSLot;
     }
+
+    public static int[] idToXY(int id){
+        Container c = Yard.getContainers().get(id);
+        int slotX = c.getCurrentSlot().getX()+c.getLength()/2;
+        int slotY = c.getCurrentSlot().getY();
+        return new int[]{slotX, slotY};
+    }
 }

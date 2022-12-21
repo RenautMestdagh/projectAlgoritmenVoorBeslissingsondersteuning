@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Trajectory {
     HashMap<Integer, Punt> trajectory = new HashMap<>();       //key: time      value: Punt
-    final int safety_value = 5;
+    final int safety_value = 1;
 
     public Trajectory(Crane k, int toX, int toY, int startTime){
         int time = (int)Math.ceil(k.travelTime(toX, toY));

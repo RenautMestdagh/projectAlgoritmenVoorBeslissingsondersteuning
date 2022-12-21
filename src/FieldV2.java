@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.Stack;
 
 public class FieldV2 {
-    private final Stack<Container>[][] map;
+    private static Stack<Container>[][] map;
     private final int X;
     private final int Y;
-    private final int Z;
+    private static int Z;
     public FieldV2(int X,int Y,int Z){
         this.X=X;
         this.Y=Y;
@@ -31,18 +31,20 @@ public class FieldV2 {
         if (map[currentX][currentY].peek()!=c){
             return false;
         }
-        int targetX=target.getSlot().getX();
-        int targetY=target.getSlot().getY();
+        int targetX=target.getContainer().getTarget().getX();
+        int targetY=target.getContainer().getTarget().getY();
         int lengte=c.getLength();
         //controleer of mogelijk
         if (checkIfPlacable(targetX,targetY,lengte)){
-            for (int i = 0; i < lengte; i++) {
-                map[currentX+i][currentY].pop();
-                map[targetX+i][targetY].push(c);
+            //System.out.println("Moved container "+c.getId()+ " from: "+c.getCurrentSlot().getId()+" to "+c.getTarget().getId());
+            if(Yard.getCraneForOperation(c.getCurrentSlot(), c.getTarget(), c.getId())){
+                c.setCurrentSlot(c.getTarget());
+                for (int i = 0; i < lengte; i++) {
+                    map[currentX+i][currentY].pop();
+                    map[targetX+i][targetY].push(c);
+                }
+                return true;
             }
-            System.out.println("Moved container "+c.getId()+ " from: "+c.getCurrentSlot().getId()+" to "+c.getTarget().getId());
-            c.setCurrentSlot(c.getTarget());
-            return true;
         }
         return false;
     }
@@ -69,16 +71,19 @@ public class FieldV2 {
         int lengte=c.getLength();
 
         if(checkIfPlacable(targetX,targetY,lengte)){
-            for (int i = 1; i < grootteStack-niveauContainer; i++) {
-                System.out.println("while holding: "+map[currentX][currentY].get(niveauContainer+i).getId());
+            if(Yard.getCraneForOperation(c.getCurrentSlot(), c.getTarget(), c.getId())){
+                for (int i = 1; i < grootteStack-niveauContainer; i++) {
+                    System.out.println("while holding: "+map[currentX][currentY].get(niveauContainer+i).getId());
+                }
+                for (int i = 0; i < lengte; i++) {
+                    map[currentX+i][currentY].remove(c);
+                    map[targetX+i][targetY].push(c);
+                }
+                System.out.println("Moved "+c.getId()+ " from: "+c.getCurrentSlot().getId()+" to "+target.getSlot().getId());
+                c.setCurrentSlot(target.getSlot());
+                return true;
             }
-            for (int i = 0; i < lengte; i++) {
-                map[currentX+i][currentY].remove(c);
-                map[targetX+i][targetY].push(c);
-            }
-            System.out.println("Moved "+c.getId()+ " from: "+c.getCurrentSlot().getId()+" to "+c.getTarget().getId());
-            c.setCurrentSlot(target.getSlot());
-            return true;
+
         }
 
 
@@ -128,8 +133,7 @@ public class FieldV2 {
 
                             for (int i = 0; i < tomove.getLength(); i++) {
                                 map[x+i][y].push(tomove);
-                                map[tomove.getCurrentSlot().getX()+i]
-                                        [tomove.getCurrentSlot().getY()].pop();
+                                map[tomove.getCurrentSlot().getX()+i][tomove.getCurrentSlot().getY()].pop();
                             }
                             Slot slot=slots.get(x+y*X);
                             if (slot.getX()!=x||slot.getY()!=y) System.out.println("foutje herberken key");
@@ -169,14 +173,11 @@ public class FieldV2 {
                 if (checkIfPlacable(x,y,container.getLength(),targetHeigt)){
                     for (int i = 0; i < container.getLength(); i++) {
                         map[x+i][y].push(container);
-                        map[container.getCurrentSlot().getX()+i]
-                                [container.getCurrentSlot().getY()].pop();
+                        map[container.getCurrentSlot().getX()+i][container.getCurrentSlot().getY()].pop();
                     }
                     Slot slot=slots.get(x+y*X);
                     if (slot.getX()!=x||slot.getY()!=y) System.out.println("foutje herberken key");
-                    System.out.println("Moved container"+container.getId()+
-                            " from: "+container.getCurrentSlot().getX()+"," +container.getCurrentSlot().getY()+
-                            " to "+slot.getX()+","+slot.getY());
+                    System.out.println("Moved container"+container.getId()+ " from: "+container.getCurrentSlot().getX()+"," +container.getCurrentSlot().getY()+ " to "+slot.getX()+","+slot.getY());
                     container.setCurrentSlot(slot);
                     return true;
                 }
@@ -185,8 +186,8 @@ public class FieldV2 {
 
         return false;
     }
-    public boolean checkIfPlacable(int x, int y, int lengte){return checkIfPlacable(x,y,lengte,Z);}
-    public boolean checkIfPlacable(int x, int y, int lengte,int targetHeight){
+    public static boolean checkIfPlacable(int x, int y, int lengte){return checkIfPlacable(x,y,lengte,Z);}
+    public static boolean checkIfPlacable(int x, int y, int lengte, int targetHeight){
         Stack<Container> containerStack=map[x][y];
         int size=containerStack.size();
 
